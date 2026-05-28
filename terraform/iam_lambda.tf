@@ -167,6 +167,15 @@ data "aws_iam_policy_document" "cron_lambda_role_policy" {
     ]
     resources = ["*"]
   }
+
+  # Lambda — invoke notifications-send (cron triggers notification dispatch)
+  statement {
+    effect  = "Allow"
+    actions = ["lambda:InvokeFunction"]
+    resources = [
+      "arn:aws:lambda:${var.aws_region}:${data.aws_caller_identity.web_app_account.account_id}:function:${var.app_name}-notifications-send"
+    ]
+  }
 }
 
 resource "aws_iam_role_policy" "cron_lambda_role_policy" {
