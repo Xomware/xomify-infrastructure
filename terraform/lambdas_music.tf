@@ -21,6 +21,13 @@ locals {
       http_method   = "GET"
       authorization = "NONE"
     },
+    {
+      name          = "public-now-playing"
+      description   = "Public unauthenticated currently-playing track for an allowlisted user"
+      path_part     = "public-now-playing"
+      http_method   = "GET"
+      authorization = "NONE"
+    },
   ]
 }
 
