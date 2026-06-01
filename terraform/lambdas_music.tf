@@ -7,6 +7,20 @@ locals {
       http_method   = "GET"
       authorization = "NONE"
     },
+    {
+      name          = "public-release-radar"
+      description   = "Public unauthenticated weekly release radar for an allowlisted user"
+      path_part     = "public-release-radar"
+      http_method   = "GET"
+      authorization = "NONE"
+    },
+    {
+      name          = "public-wrapped"
+      description   = "Public unauthenticated monthly wrapped (hydrated) for an allowlisted user"
+      path_part     = "public-wrapped"
+      http_method   = "GET"
+      authorization = "NONE"
+    },
   ]
 }
 
