@@ -118,6 +118,18 @@ locals {
       invoke_arn  = aws_lambda_function.users[l.name].invoke_arn
     }
   ]
+
+  # Public/unauthenticated routes. `authorization` is carried through so the
+  # module skips the custom JWT authorizer (NONE) rather than inheriting CUSTOM.
+  music_endpoints = [
+    for l in local.music_lambdas : {
+      name          = l.name
+      path_part     = l.path_part
+      http_method   = l.http_method
+      invoke_arn    = aws_lambda_function.music[l.name].invoke_arn
+      authorization = l.authorization
+    }
+  ]
 }
 
 module "api" {
@@ -148,5 +160,6 @@ module "api" {
     auth          = { path_prefix = "auth", endpoints = local.auth_endpoints }
     likes         = { path_prefix = "likes", endpoints = local.likes_endpoints }
     users         = { path_prefix = "users", endpoints = local.users_endpoints }
+    music         = { path_prefix = "music", endpoints = local.music_endpoints }
   }
 }
