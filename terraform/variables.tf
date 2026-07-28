@@ -109,6 +109,13 @@ variable "from_email" {
   default     = "noreply@xomify.xomware.com"
 }
 
+# Admin
+variable "admin_email" {
+  description = "Email address granted admin privileges (broadcast management). Compared case-insensitively against the caller's JWT email."
+  type        = string
+  default     = "dominickj.giordano@gmail.com"
+}
+
 # API Gateway
 variable "api_stage_name" {
   description = "API Gateway deployment stage name"

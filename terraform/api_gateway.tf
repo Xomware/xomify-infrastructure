@@ -119,6 +119,33 @@ locals {
     }
   ]
 
+  favorites_endpoints = [
+    for l in local.favorites_lambdas : {
+      name        = l.name
+      path_part   = l.path_part
+      http_method = l.http_method
+      invoke_arn  = aws_lambda_function.favorites[l.name].invoke_arn
+    }
+  ]
+
+  broadcasts_endpoints = [
+    for l in local.broadcasts_lambdas : {
+      name        = l.name
+      path_part   = l.path_part
+      http_method = l.http_method
+      invoke_arn  = aws_lambda_function.broadcasts[l.name].invoke_arn
+    }
+  ]
+
+  admin_endpoints = [
+    for l in local.admin_lambdas : {
+      name        = l.name
+      path_part   = l.path_part
+      http_method = l.http_method
+      invoke_arn  = aws_lambda_function.admin[l.name].invoke_arn
+    }
+  ]
+
   # Public/unauthenticated routes. `authorization` is carried through so the
   # module skips the custom JWT authorizer (NONE) rather than inheriting CUSTOM.
   music_endpoints = [
@@ -161,5 +188,8 @@ module "api" {
     likes         = { path_prefix = "likes", endpoints = local.likes_endpoints }
     users         = { path_prefix = "users", endpoints = local.users_endpoints }
     music         = { path_prefix = "music", endpoints = local.music_endpoints }
+    favorites     = { path_prefix = "favorites", endpoints = local.favorites_endpoints }
+    broadcasts    = { path_prefix = "broadcasts", endpoints = local.broadcasts_endpoints }
+    admin         = { path_prefix = "admin", endpoints = local.admin_endpoints }
   }
 }

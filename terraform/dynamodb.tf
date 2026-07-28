@@ -587,3 +587,78 @@ resource "aws_dynamodb_table" "user_likes" {
   tags = merge(local.standard_tags, tomap({ "name" = "${var.app_name}-user-likes" }))
 }
 
+########################################
+# 17. xomify-favorites
+# Single-table year-end favorites lists + rank-change history.
+# PK email + SK sk carries multiple row types:
+#   LIST#{year}#{listId}  — a ranked list (overall or custom)
+#   HIST#{listId}#{ts}#{seq} — append-only rank-change events
+#   REMINDER#{year}       — cron idempotency marker
+# Query by year via begins_with(sk, "LIST#{year}#"); history via
+# begins_with(sk, "HIST#{listId}#"). No GSI needed.
+########################################
+resource "aws_dynamodb_table" "favorites" {
+  name           = "${var.app_name}-favorites"
+  billing_mode   = "PAY_PER_REQUEST"
+  read_capacity  = 0
+  write_capacity = 0
+  hash_key       = "email"
+  range_key      = "sk"
+
+  server_side_encryption {
+    enabled     = true
+    kms_key_arn = aws_kms_alias.dynamodb.target_key_arn
+  }
+
+  point_in_time_recovery {
+    enabled = true
+  }
+
+  attribute {
+    name = "email"
+    type = "S"
+  }
+
+  attribute {
+    name = "sk"
+    type = "S"
+  }
+
+  tags = merge(local.standard_tags, tomap({ "name" = "${var.app_name}-favorites" }))
+}
+
+########################################
+# 18. xomify-broadcasts
+# Small admin-authored broadcast/announcement table. "active" is computed
+# (activeUntil null or in the future) via scan+filter given tiny volume.
+# Optional TTL on `ttl` (epoch) reaps expired rows when activeUntil is set.
+########################################
+resource "aws_dynamodb_table" "broadcasts" {
+  name           = "${var.app_name}-broadcasts"
+  billing_mode   = "PAY_PER_REQUEST"
+  read_capacity  = 0
+  write_capacity = 0
+  hash_key       = "broadcastId"
+
+  server_side_encryption {
+    enabled     = true
+    kms_key_arn = aws_kms_alias.dynamodb.target_key_arn
+  }
+
+  point_in_time_recovery {
+    enabled = true
+  }
+
+  attribute {
+    name = "broadcastId"
+    type = "S"
+  }
+
+  ttl {
+    attribute_name = "ttl"
+    enabled        = true
+  }
+
+  tags = merge(local.standard_tags, tomap({ "name" = "${var.app_name}-broadcasts" }))
+}
+
