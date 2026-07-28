@@ -146,6 +146,15 @@ locals {
     }
   ]
 
+  visits_endpoints = [
+    for l in local.visits_lambdas : {
+      name        = l.name
+      path_part   = l.path_part
+      http_method = l.http_method
+      invoke_arn  = aws_lambda_function.visits[l.name].invoke_arn
+    }
+  ]
+
   # Public/unauthenticated routes. `authorization` is carried through so the
   # module skips the custom JWT authorizer (NONE) rather than inheriting CUSTOM.
   music_endpoints = [
@@ -191,5 +200,6 @@ module "api" {
     favorites     = { path_prefix = "favorites", endpoints = local.favorites_endpoints }
     broadcasts    = { path_prefix = "broadcasts", endpoints = local.broadcasts_endpoints }
     admin         = { path_prefix = "admin", endpoints = local.admin_endpoints }
+    visits        = { path_prefix = "visits", endpoints = local.visits_endpoints }
   }
 }

@@ -18,6 +18,42 @@ locals {
       path_part   = "broadcasts-delete"
       http_method = "DELETE"
     },
+    {
+      name        = "health"
+      description = "Admin-only: API health rollup from the request log"
+      path_part   = "health"
+      http_method = "GET"
+    },
+    {
+      name        = "users-list"
+      description = "Admin-only: user directory with opt-ins + lastSeen"
+      path_part   = "users-list"
+      http_method = "GET"
+    },
+    {
+      name        = "user-visits"
+      description = "Admin-only: page-visit history for one user"
+      path_part   = "user-visits"
+      http_method = "GET"
+    },
+    {
+      name        = "crons"
+      description = "Admin-only: cron run history"
+      path_part   = "crons"
+      http_method = "GET"
+    },
+    {
+      name        = "notifications"
+      description = "Admin-only: outbound email/push notification log"
+      path_part   = "notifications"
+      http_method = "GET"
+    },
+    {
+      name        = "view-as"
+      description = "Admin-only: read-only impersonation projection for a user"
+      path_part   = "view-as"
+      http_method = "GET"
+    },
   ]
 }
 

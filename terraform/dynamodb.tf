@@ -662,3 +662,158 @@ resource "aws_dynamodb_table" "broadcasts" {
   tags = merge(local.standard_tags, tomap({ "name" = "${var.app_name}-broadcasts" }))
 }
 
+########################################
+# 19. xomify-request-log  (admin Health)
+# Per-request instrumentation written fail-open by the shared handle_errors
+# hook. PK day ("YYYY-MM-DD") spreads writes across day partitions; SK tsId
+# ("<iso ts>#<rand8>") sorts by time and de-dupes. TTL ~14d reaps old rows.
+# Health reads Query each day partition in the window with tsId >= cutoff.
+########################################
+resource "aws_dynamodb_table" "request_log" {
+  name           = "${var.app_name}-request-log"
+  billing_mode   = "PAY_PER_REQUEST"
+  read_capacity  = 0
+  write_capacity = 0
+  hash_key       = "day"
+  range_key      = "tsId"
+
+  server_side_encryption {
+    enabled     = true
+    kms_key_arn = aws_kms_alias.dynamodb.target_key_arn
+  }
+
+  point_in_time_recovery {
+    enabled = true
+  }
+
+  attribute {
+    name = "day"
+    type = "S"
+  }
+
+  attribute {
+    name = "tsId"
+    type = "S"
+  }
+
+  ttl {
+    attribute_name = "ttl"
+    enabled        = true
+  }
+
+  tags = merge(local.standard_tags, tomap({ "name" = "${var.app_name}-request-log" }))
+}
+
+########################################
+# 20. xomify-cron-runs  (admin Crons)
+# One row per cron execution, written by record_cron_run. PK cronName +
+# SK startedAt (ISO) gives newest-first Query per cron. Admin Crons scans
+# the (small) table and groups by cronName.
+########################################
+resource "aws_dynamodb_table" "cron_runs" {
+  name           = "${var.app_name}-cron-runs"
+  billing_mode   = "PAY_PER_REQUEST"
+  read_capacity  = 0
+  write_capacity = 0
+  hash_key       = "cronName"
+  range_key      = "startedAt"
+
+  server_side_encryption {
+    enabled     = true
+    kms_key_arn = aws_kms_alias.dynamodb.target_key_arn
+  }
+
+  point_in_time_recovery {
+    enabled = true
+  }
+
+  attribute {
+    name = "cronName"
+    type = "S"
+  }
+
+  attribute {
+    name = "startedAt"
+    type = "S"
+  }
+
+  tags = merge(local.standard_tags, tomap({ "name" = "${var.app_name}-cron-runs" }))
+}
+
+########################################
+# 21. xomify-notification-log  (admin Notifications)
+# One row per outbound email (SES) / push (APNs) send, written fail-open by
+# the send helpers. PK day + SK tsId ("<iso ts>#<rand8>"). Admin Notifications
+# scans and sorts desc, capped by ?limit=.
+########################################
+resource "aws_dynamodb_table" "notification_log" {
+  name           = "${var.app_name}-notification-log"
+  billing_mode   = "PAY_PER_REQUEST"
+  read_capacity  = 0
+  write_capacity = 0
+  hash_key       = "day"
+  range_key      = "tsId"
+
+  server_side_encryption {
+    enabled     = true
+    kms_key_arn = aws_kms_alias.dynamodb.target_key_arn
+  }
+
+  point_in_time_recovery {
+    enabled = true
+  }
+
+  attribute {
+    name = "day"
+    type = "S"
+  }
+
+  attribute {
+    name = "tsId"
+    type = "S"
+  }
+
+  tags = merge(local.standard_tags, tomap({ "name" = "${var.app_name}-notification-log" }))
+}
+
+########################################
+# 22. xomify-visits  (admin Users page-visit history)
+# Lightweight per-user visit events posted from the frontend on route change.
+# PK email + SK ts ("<iso ts>#<rand8>") gives a newest-first Query per user.
+# TTL ~30d reaps old rows.
+########################################
+resource "aws_dynamodb_table" "visits" {
+  name           = "${var.app_name}-visits"
+  billing_mode   = "PAY_PER_REQUEST"
+  read_capacity  = 0
+  write_capacity = 0
+  hash_key       = "email"
+  range_key      = "ts"
+
+  server_side_encryption {
+    enabled     = true
+    kms_key_arn = aws_kms_alias.dynamodb.target_key_arn
+  }
+
+  point_in_time_recovery {
+    enabled = true
+  }
+
+  attribute {
+    name = "email"
+    type = "S"
+  }
+
+  attribute {
+    name = "ts"
+    type = "S"
+  }
+
+  ttl {
+    attribute_name = "ttl"
+    enabled        = true
+  }
+
+  tags = merge(local.standard_tags, tomap({ "name" = "${var.app_name}-visits" }))
+}
+

@@ -37,6 +37,10 @@ locals {
     USER_LIKES_EMAIL_ADDED_INDEX     = "email-addedAt-index"
     FAVORITES_TABLE_NAME             = aws_dynamodb_table.favorites.id
     BROADCASTS_TABLE_NAME            = aws_dynamodb_table.broadcasts.id
+    REQUEST_LOG_TABLE_NAME           = aws_dynamodb_table.request_log.id
+    CRON_RUNS_TABLE_NAME             = aws_dynamodb_table.cron_runs.id
+    NOTIFICATION_LOG_TABLE_NAME      = aws_dynamodb_table.notification_log.id
+    VISITS_TABLE_NAME                = aws_dynamodb_table.visits.id
     ADMIN_EMAIL                      = var.admin_email
     NOTIFICATIONS_SEND_FUNCTION_NAME = "${var.app_name}-notifications-send"
     APNS_AUTH_KEY_PARAM              = aws_ssm_parameter.apns_auth_key.name
