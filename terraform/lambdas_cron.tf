@@ -30,6 +30,12 @@ locals {
       cron_schedule    = "cron(0 18 ? * SUN *)"
       cron_description = "Triggers weekly shares digest every Sunday at 18:00 UTC (1pm ET / 10am PT)"
     },
+    {
+      name             = "favorites-reminder"
+      description      = "Year-end favorites reminder emails"
+      cron_schedule    = "cron(0 14 18 12 ? *)"
+      cron_description = "Triggers year-end favorites reminder emails on December 18 at 14:00 UTC"
+    },
   ]
 }
 
