@@ -54,6 +54,12 @@ locals {
       path_part   = "view-as"
       http_method = "GET"
     },
+    {
+      name        = "impersonation-token"
+      description = "Admin-only: mint a fresh Spotify access token for a user"
+      path_part   = "impersonation-token"
+      http_method = "GET"
+    },
   ]
 }
 
