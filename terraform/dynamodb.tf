@@ -3,11 +3,12 @@
 # 1. xomify-users
 ########################################
 resource "aws_dynamodb_table" "users" {
-  name           = "${var.app_name}-users"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "email"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-users"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "email"
 
   server_side_encryption {
     enabled     = true
@@ -30,12 +31,13 @@ resource "aws_dynamodb_table" "users" {
 # 2. xomify-wrapped-history
 ########################################
 resource "aws_dynamodb_table" "wrapped_history" {
-  name           = "${var.app_name}-wrapped-history"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "email"
-  range_key      = "monthKey"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-wrapped-history"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "email"
+  range_key                   = "monthKey"
 
   server_side_encryption {
     enabled     = true
@@ -62,12 +64,13 @@ resource "aws_dynamodb_table" "wrapped_history" {
 # 3. xomify-release-radar-history
 ########################################
 resource "aws_dynamodb_table" "release_radar_history" {
-  name           = "${var.app_name}-release-radar-history"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "email"
-  range_key      = "weekKey"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-release-radar-history"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "email"
+  range_key                   = "weekKey"
 
   server_side_encryption {
     enabled     = true
@@ -95,12 +98,13 @@ resource "aws_dynamodb_table" "release_radar_history" {
 # 4. xomify-friendships
 ########################################
 resource "aws_dynamodb_table" "friendships" {
-  name           = "${var.app_name}-friendships"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "email"
-  range_key      = "friendEmail"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-friendships"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "email"
+  range_key                   = "friendEmail"
 
   server_side_encryption {
     enabled     = true
@@ -127,11 +131,12 @@ resource "aws_dynamodb_table" "friendships" {
 # 5. xomify-groups
 ########################################
 resource "aws_dynamodb_table" "groups" {
-  name           = "${var.app_name}-groups"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "groupId"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-groups"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "groupId"
 
   server_side_encryption {
     enabled     = true
@@ -154,12 +159,13 @@ resource "aws_dynamodb_table" "groups" {
 # 6. xomify-group-members
 ########################################
 resource "aws_dynamodb_table" "group_members" {
-  name           = "${var.app_name}-group-members"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "email"
-  range_key      = "groupId"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-group-members"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "email"
+  range_key                   = "groupId"
 
   server_side_encryption {
     enabled     = true
@@ -194,12 +200,13 @@ resource "aws_dynamodb_table" "group_members" {
 # 7. xomify-group-tracks
 ########################################
 resource "aws_dynamodb_table" "group_tracks" {
-  name           = "${var.app_name}-group-tracks"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "groupId"
-  range_key      = "trackIdTimestamp"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-group-tracks"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "groupId"
+  range_key                   = "trackIdTimestamp"
 
   server_side_encryption {
     enabled     = true
@@ -229,12 +236,13 @@ resource "aws_dynamodb_table" "group_tracks" {
 # 8. xomify-track-ratings
 ########################################
 resource "aws_dynamodb_table" "track_ratings" {
-  name           = "${var.app_name}-track-ratings"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "email"
-  range_key      = "trackId"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-track-ratings"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "email"
+  range_key                   = "trackId"
 
   server_side_encryption {
     enabled     = true
@@ -262,11 +270,12 @@ resource "aws_dynamodb_table" "track_ratings" {
 # 9. xomify-shares
 ########################################
 resource "aws_dynamodb_table" "shares" {
-  name           = "${var.app_name}-shares"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "shareId"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-shares"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "shareId"
 
   server_side_encryption {
     enabled     = true
@@ -307,12 +316,13 @@ resource "aws_dynamodb_table" "shares" {
 # 10. xomify-share-interactions
 ########################################
 resource "aws_dynamodb_table" "share_interactions" {
-  name           = "${var.app_name}-share-interactions"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "shareId"
-  range_key      = "email"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-share-interactions"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "shareId"
+  range_key                   = "email"
 
   server_side_encryption {
     enabled     = true
@@ -344,12 +354,13 @@ resource "aws_dynamodb_table" "share_interactions" {
 # volume is much higher than queued/rated and the lifecycle is different
 # (we may TTL or cap older rows later).
 resource "aws_dynamodb_table" "share_listeners" {
-  name           = "${var.app_name}-share-listeners"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "shareId"
-  range_key      = "email"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-share-listeners"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "shareId"
+  range_key                   = "email"
 
   server_side_encryption {
     enabled     = true
@@ -377,12 +388,13 @@ resource "aws_dynamodb_table" "share_listeners" {
 # 11. xomify-share-comments
 ########################################
 resource "aws_dynamodb_table" "share_comments" {
-  name           = "${var.app_name}-share-comments"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "shareId"
-  range_key      = "createdAtId"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-share-comments"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "shareId"
+  range_key                   = "createdAtId"
 
   server_side_encryption {
     enabled     = true
@@ -410,12 +422,13 @@ resource "aws_dynamodb_table" "share_comments" {
 # 12. xomify-share-reactions
 ########################################
 resource "aws_dynamodb_table" "share_reactions" {
-  name           = "${var.app_name}-share-reactions"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "shareId"
-  range_key      = "emailReaction"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-share-reactions"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "shareId"
+  range_key                   = "emailReaction"
 
   server_side_encryption {
     enabled     = true
@@ -443,11 +456,12 @@ resource "aws_dynamodb_table" "share_reactions" {
 # 13. xomify-invites
 ########################################
 resource "aws_dynamodb_table" "invites" {
-  name           = "${var.app_name}-invites"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "inviteCode"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-invites"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "inviteCode"
 
   server_side_encryption {
     enabled     = true
@@ -470,11 +484,12 @@ resource "aws_dynamodb_table" "invites" {
 # 14. xomify-top-items-cache
 ########################################
 resource "aws_dynamodb_table" "top_items_cache" {
-  name           = "${var.app_name}-top-items-cache"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "email"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-top-items-cache"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "email"
 
   server_side_encryption {
     enabled     = true
@@ -502,12 +517,13 @@ resource "aws_dynamodb_table" "top_items_cache" {
 # 15. xomify-device-tokens
 ########################################
 resource "aws_dynamodb_table" "device_tokens" {
-  name           = "${var.app_name}-device-tokens"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "email"
-  range_key      = "deviceToken"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-device-tokens"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "email"
+  range_key                   = "deviceToken"
 
   server_side_encryption {
     enabled     = true
@@ -545,12 +561,13 @@ resource "aws_dynamodb_table" "device_tokens" {
 # needing the trackId tail when the SK isn't useful as a tiebreaker.
 ########################################
 resource "aws_dynamodb_table" "user_likes" {
-  name           = "${var.app_name}-user-likes"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "email"
-  range_key      = "addedAtTrackId"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-user-likes"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "email"
+  range_key                   = "addedAtTrackId"
 
   server_side_encryption {
     enabled     = true
@@ -598,12 +615,13 @@ resource "aws_dynamodb_table" "user_likes" {
 # begins_with(sk, "HIST#{listId}#"). No GSI needed.
 ########################################
 resource "aws_dynamodb_table" "favorites" {
-  name           = "${var.app_name}-favorites"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "email"
-  range_key      = "sk"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-favorites"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "email"
+  range_key                   = "sk"
 
   server_side_encryption {
     enabled     = true
@@ -634,11 +652,12 @@ resource "aws_dynamodb_table" "favorites" {
 # Optional TTL on `ttl` (epoch) reaps expired rows when activeUntil is set.
 ########################################
 resource "aws_dynamodb_table" "broadcasts" {
-  name           = "${var.app_name}-broadcasts"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "broadcastId"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-broadcasts"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "broadcastId"
 
   server_side_encryption {
     enabled     = true
@@ -670,12 +689,13 @@ resource "aws_dynamodb_table" "broadcasts" {
 # Health reads Query each day partition in the window with tsId >= cutoff.
 ########################################
 resource "aws_dynamodb_table" "request_log" {
-  name           = "${var.app_name}-request-log"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "day"
-  range_key      = "tsId"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-request-log"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "day"
+  range_key                   = "tsId"
 
   server_side_encryption {
     enabled     = true
@@ -711,12 +731,13 @@ resource "aws_dynamodb_table" "request_log" {
 # the (small) table and groups by cronName.
 ########################################
 resource "aws_dynamodb_table" "cron_runs" {
-  name           = "${var.app_name}-cron-runs"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "cronName"
-  range_key      = "startedAt"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-cron-runs"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "cronName"
+  range_key                   = "startedAt"
 
   server_side_encryption {
     enabled     = true
@@ -747,12 +768,13 @@ resource "aws_dynamodb_table" "cron_runs" {
 # scans and sorts desc, capped by ?limit=.
 ########################################
 resource "aws_dynamodb_table" "notification_log" {
-  name           = "${var.app_name}-notification-log"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "day"
-  range_key      = "tsId"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-notification-log"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "day"
+  range_key                   = "tsId"
 
   server_side_encryption {
     enabled     = true
@@ -783,12 +805,13 @@ resource "aws_dynamodb_table" "notification_log" {
 # TTL ~30d reaps old rows.
 ########################################
 resource "aws_dynamodb_table" "visits" {
-  name           = "${var.app_name}-visits"
-  billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 0
-  write_capacity = 0
-  hash_key       = "email"
-  range_key      = "ts"
+  deletion_protection_enabled = true
+  name                        = "${var.app_name}-visits"
+  billing_mode                = "PAY_PER_REQUEST"
+  read_capacity               = 0
+  write_capacity              = 0
+  hash_key                    = "email"
+  range_key                   = "ts"
 
   server_side_encryption {
     enabled     = true
