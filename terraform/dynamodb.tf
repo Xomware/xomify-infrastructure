@@ -817,3 +817,91 @@ resource "aws_dynamodb_table" "visits" {
   tags = merge(local.standard_tags, tomap({ "name" = "${var.app_name}-visits" }))
 }
 
+# ============================================================================
+# Notifications inbox (relaunch epic, B3)
+# ============================================================================
+# Per-user notification feed with read state. Deliberately NOT the same table
+# as `notification_log`: that one is PK `day` and answers "what did we send
+# yesterday?" for the admin view. This one is PK `email`, queried newest-first
+# for one user, with mutable read state.
+#
+# The sort key is "<iso8601>#<rand8>". ISO8601 sorts chronologically and
+# lexicographically at once, so ScanIndexForward=false is newest-first with no
+# extra index, and paging is a plain ExclusiveStartKey.
+resource "aws_dynamodb_table" "notifications" {
+  name           = "${var.app_name}-notifications"
+  billing_mode   = "PAY_PER_REQUEST"
+  read_capacity  = 0
+  write_capacity = 0
+  hash_key       = "email"
+  range_key      = "tsId"
+
+  server_side_encryption {
+    enabled     = true
+    kms_key_arn = aws_kms_alias.dynamodb.target_key_arn
+  }
+
+  point_in_time_recovery {
+    enabled = true
+  }
+
+  attribute {
+    name = "email"
+    type = "S"
+  }
+
+  attribute {
+    name = "tsId"
+    type = "S"
+  }
+
+  # MUST match the attribute the application actually writes
+  # (notifications_dynamo.put_notification writes `ttl`). A TTL configured on
+  # an attribute nobody writes is a TTL that never fires — see the note on
+  # `device_tokens` below.
+  ttl {
+    attribute_name = "ttl"
+    enabled        = true
+  }
+
+  tags = merge(local.standard_tags, tomap({ "name" = "${var.app_name}-notifications" }))
+}
+
+# ============================================================================
+# Notification coalescing buffer (relaunch epic, B1)
+# ============================================================================
+# Holds the first of a sibling pair (share_listened / share_rated) for up to
+# ten minutes so the two can go out as one push. Rows are short-lived by
+# design; the 5-minute sweeper cron drains anything whose window lapsed, and
+# TTL is only a backstop for rows the sweeper never got to.
+resource "aws_dynamodb_table" "notification_pending" {
+  name           = "${var.app_name}-notification-pending"
+  billing_mode   = "PAY_PER_REQUEST"
+  read_capacity  = 0
+  write_capacity = 0
+  hash_key       = "coalesceKey"
+
+  server_side_encryption {
+    enabled     = true
+    kms_key_arn = aws_kms_alias.dynamodb.target_key_arn
+  }
+
+  # No PITR: every row here is transient and reconstructible. Backing up a
+  # ten-minute buffer is paying to protect nothing.
+  point_in_time_recovery {
+    enabled = false
+  }
+
+  attribute {
+    name = "coalesceKey"
+    type = "S"
+  }
+
+  ttl {
+    attribute_name = "ttl"
+    enabled        = true
+  }
+
+  tags = merge(local.standard_tags, tomap({ "name" = "${var.app_name}-notification-pending" }))
+}
+

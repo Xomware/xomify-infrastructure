@@ -40,6 +40,8 @@ locals {
     REQUEST_LOG_TABLE_NAME           = aws_dynamodb_table.request_log.id
     CRON_RUNS_TABLE_NAME             = aws_dynamodb_table.cron_runs.id
     NOTIFICATION_LOG_TABLE_NAME      = aws_dynamodb_table.notification_log.id
+    NOTIFICATIONS_TABLE_NAME         = aws_dynamodb_table.notifications.id
+    NOTIFICATION_PENDING_TABLE_NAME  = aws_dynamodb_table.notification_pending.id
     VISITS_TABLE_NAME                = aws_dynamodb_table.visits.id
     ADMIN_EMAIL                      = var.admin_email
     NOTIFICATIONS_SEND_FUNCTION_NAME = "${var.app_name}-notifications-send"
