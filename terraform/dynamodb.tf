@@ -555,9 +555,20 @@ resource "aws_dynamodb_table" "device_tokens" {
   # genuinely dormant tokens — which is what the code always intended. A pruned
   # token is also harmless: the next registration re-creates it, and APNs
   # returns 410 for one that is truly dead.
+  # STEP 1 OF 2 — TTL temporarily disabled.
+  #
+  # DynamoDB refuses to move TTL to a different attribute in one call:
+  #   "TimeToLive is active on a different AttributeName: current
+  #    AttributeName is expiresAt"
+  # It must be disabled in one apply and re-enabled on the new attribute in
+  # the next. This is that first apply.
+  #
+  # Disabling costs nothing in the meantime: TTL was pointed at `expiresAt`,
+  # which the application has never written, so it has never actually reaped
+  # anything. See the follow-up PR for step 2.
   ttl {
-    attribute_name = "ttl"
-    enabled        = true
+    attribute_name = "expiresAt"
+    enabled        = false
   }
 
   tags = merge(local.standard_tags, tomap({ "name" = "${var.app_name}-device-tokens" }))
