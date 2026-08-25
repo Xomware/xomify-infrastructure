@@ -544,8 +544,19 @@ resource "aws_dynamodb_table" "device_tokens" {
     type = "S"
   }
 
+  # MUST match the attribute the application writes.
+  #
+  # This was "expiresAt" while device_tokens_dynamo.upsert_token has always
+  # written "ttl" — a TTL configured on an attribute nothing writes never
+  # fires, so device tokens have never expired despite that module's docstring
+  # promising a ~180 day prune.
+  #
+  # Rows carry a `ttl` 180 days in the future, so correcting this only reaps
+  # genuinely dormant tokens — which is what the code always intended. A pruned
+  # token is also harmless: the next registration re-creates it, and APNs
+  # returns 410 for one that is truly dead.
   ttl {
-    attribute_name = "expiresAt"
+    attribute_name = "ttl"
     enabled        = true
   }
 
