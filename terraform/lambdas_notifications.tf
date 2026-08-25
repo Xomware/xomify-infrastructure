@@ -112,3 +112,47 @@ resource "aws_lambda_function" "notifications_send" {
     aws_iam_role.lambda_role
   ]
 }
+
+# Internal-invoke only: called by admin_broadcasts_create. Not wired to API
+# Gateway.
+#
+# Separate from the request handler on purpose — reaching every user means a
+# full users-table scan plus one dispatch each, which must not happen on the
+# admin's request path. Given the fan-out, it gets a longer timeout and more
+# memory than the API lambdas.
+resource "aws_lambda_function" "notifications_broadcast_fanout" {
+  function_name    = "${var.app_name}-notifications-broadcast-fanout"
+  description      = "Fan an admin broadcast out to every active user (internal invoke)"
+  filename         = "./templates/lambda_stub.zip"
+  source_code_hash = filebase64sha256("./templates/lambda_stub.zip")
+  handler          = "handler.handler"
+  layers           = [aws_lambda_layer_version.lambda_layer.arn]
+  runtime          = var.lambda_runtime
+  memory_size      = 512
+  timeout          = 300
+  role             = aws_iam_role.lambda_role.arn
+
+  environment {
+    variables = local.lambda_variables
+  }
+
+  tracing_config {
+    mode = var.lambda_trace_mode
+  }
+
+  tags = merge(local.standard_tags, tomap({ "name" = "${var.app_name}-notifications-broadcast-fanout", "lambda_type" = "notifications" }))
+
+  lifecycle {
+    ignore_changes = [
+      description,
+      filename,
+      source_code_hash,
+      layers
+    ]
+  }
+
+  depends_on = [
+    aws_iam_role_policy.lambda_role_policy,
+    aws_iam_role.lambda_role
+  ]
+}
