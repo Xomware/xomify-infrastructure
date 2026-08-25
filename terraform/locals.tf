@@ -45,6 +45,7 @@ locals {
     VISITS_TABLE_NAME                = aws_dynamodb_table.visits.id
     ADMIN_EMAIL                      = var.admin_email
     NOTIFICATIONS_SEND_FUNCTION_NAME = "${var.app_name}-notifications-send"
+    BROADCAST_FANOUT_FUNCTION_NAME   = "${var.app_name}-notifications-broadcast-fanout"
     APNS_AUTH_KEY_PARAM              = aws_ssm_parameter.apns_auth_key.name
     APNS_KEY_ID_PARAM                = aws_ssm_parameter.apns_key_id.name
     APNS_TEAM_ID_PARAM               = aws_ssm_parameter.apns_team_id.name
