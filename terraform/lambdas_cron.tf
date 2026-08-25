@@ -36,6 +36,21 @@ locals {
       cron_schedule    = "cron(0 14 18 12 ? *)"
       cron_description = "Triggers year-end favorites reminder emails on December 18 at 14:00 UTC"
     },
+    {
+      name             = "rate-reminder"
+      description      = "One nudge, 24h after a share lands unplayed"
+      cron_schedule    = "cron(0 17 * * ? *)"
+      cron_description = "Daily at 17:00 UTC (1pm ET / 10am PT) — scans shares in the [24h, 48h) window"
+    },
+    {
+      # NOT on the daily schedule, and that is the whole point: the coalesce
+      # window is ten minutes. A daily sweep would hold a lone "Sam listened to
+      # your song" for up to 24 hours, which is worse than never sending it.
+      name             = "notification-sweeper"
+      description      = "Drain coalescing rows whose 10-minute window lapsed"
+      cron_schedule    = "rate(5 minutes)"
+      cron_description = "Every 5 minutes — dispatches parked notifications that never found a sibling"
+    },
   ]
 }
 

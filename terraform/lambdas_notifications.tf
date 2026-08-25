@@ -12,6 +12,26 @@ locals {
       path_part   = "unregister"
       http_method = "POST"
     },
+    # Inbox endpoints (relaunch epic, B3). Serve BOTH clients — web has no APNs
+    # token at all, so the inbox is its only notification surface.
+    {
+      name        = "feed"
+      description = "Paginated notification inbox for the caller"
+      path_part   = "feed"
+      http_method = "GET"
+    },
+    {
+      name        = "read"
+      description = "Mark one or all inbox notifications read"
+      path_part   = "read"
+      http_method = "POST"
+    },
+    {
+      name        = "unread-count"
+      description = "Unread notification count for the caller's badge"
+      path_part   = "unread-count"
+      http_method = "GET"
+    },
   ]
 }
 
