@@ -119,6 +119,15 @@ locals {
     }
   ]
 
+  goals_endpoints = [
+    for l in local.goals_lambdas : {
+      name        = l.name
+      path_part   = l.path_part
+      http_method = l.http_method
+      invoke_arn  = aws_lambda_function.goals[l.name].invoke_arn
+    }
+  ]
+
   favorites_endpoints = [
     for l in local.favorites_lambdas : {
       name        = l.name
@@ -198,6 +207,7 @@ module "api" {
     users         = { path_prefix = "users", endpoints = local.users_endpoints }
     music         = { path_prefix = "music", endpoints = local.music_endpoints }
     favorites     = { path_prefix = "favorites", endpoints = local.favorites_endpoints }
+    goals         = { path_prefix = "goals", endpoints = local.goals_endpoints }
     broadcasts    = { path_prefix = "broadcasts", endpoints = local.broadcasts_endpoints }
     admin         = { path_prefix = "admin", endpoints = local.admin_endpoints }
     visits        = { path_prefix = "visits", endpoints = local.visits_endpoints }

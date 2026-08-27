@@ -954,3 +954,43 @@ resource "aws_dynamodb_table" "notification_pending" {
   tags = merge(local.standard_tags, tomap({ "name" = "${var.app_name}-notification-pending" }))
 }
 
+# ============================================================================
+# Weekly goals
+# ============================================================================
+# Single table, sk-prefixed: GOAL#{goalId} and HIST#{weekStart}.
+#
+# `weekStart` is an ISO date, so history rows sort chronologically by sort key
+# and a descending query is newest-first with no index.
+#
+# Goals were localStorage-only on web before this, which meant iOS could not
+# have the feature without creating a second, unsynced copy on the same account.
+resource "aws_dynamodb_table" "goals" {
+  name           = "${var.app_name}-goals"
+  billing_mode   = "PAY_PER_REQUEST"
+  read_capacity  = 0
+  write_capacity = 0
+  hash_key       = "email"
+  range_key      = "sk"
+
+  server_side_encryption {
+    enabled     = true
+    kms_key_arn = aws_kms_alias.dynamodb.target_key_arn
+  }
+
+  point_in_time_recovery {
+    enabled = true
+  }
+
+  attribute {
+    name = "email"
+    type = "S"
+  }
+
+  attribute {
+    name = "sk"
+    type = "S"
+  }
+
+  tags = merge(local.standard_tags, tomap({ "name" = "${var.app_name}-goals" }))
+}
+

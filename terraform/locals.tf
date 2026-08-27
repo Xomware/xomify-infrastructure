@@ -36,6 +36,7 @@ locals {
     USER_LIKES_TABLE_NAME            = aws_dynamodb_table.user_likes.id
     USER_LIKES_EMAIL_ADDED_INDEX     = "email-addedAt-index"
     FAVORITES_TABLE_NAME             = aws_dynamodb_table.favorites.id
+    GOALS_TABLE_NAME                 = aws_dynamodb_table.goals.id
     BROADCASTS_TABLE_NAME            = aws_dynamodb_table.broadcasts.id
     REQUEST_LOG_TABLE_NAME           = aws_dynamodb_table.request_log.id
     CRON_RUNS_TABLE_NAME             = aws_dynamodb_table.cron_runs.id
