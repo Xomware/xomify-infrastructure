@@ -14,8 +14,13 @@ locals {
   }
 
   # Lambda environment variables
+  # CORS_ALLOWED_ORIGINS is the same value the API Gateway module uses for
+  # preflight. The lambdas echo the caller's Origin against this list on the REAL
+  # response; if the two lists disagreed, a preflight could pass and the response
+  # still be rejected by the browser.
   lambda_variables = {
     APP_NAME                         = var.app_name
+    CORS_ALLOWED_ORIGINS             = var.cors_allowed_origins
     DYNAMODB_KMS_ALIAS               = aws_kms_alias.dynamodb.name
     USERS_TABLE_NAME                 = aws_dynamodb_table.users.id
     WRAPPED_HISTORY_TABLE_NAME       = aws_dynamodb_table.wrapped_history.id
