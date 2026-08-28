@@ -17,6 +17,7 @@ locals {
   github_oidc_repos = {
     frontend = var.github_frontend_repo
     backend  = var.github_backend_repo
+    ios      = var.github_ios_repo
   }
 }
 
@@ -163,4 +164,36 @@ resource "aws_iam_role_policy" "github_actions_backend" {
   name   = "deploy"
   role   = aws_iam_role.github_actions["backend"].id
   policy = data.aws_iam_policy_document.github_actions_backend.json
+}
+
+#**********************
+# iOS: read the same build config the web deploy does, and nothing else
+#**********************
+
+# The TestFlight workflow bakes the Spotify client id/secret and the API id and
+# token into the app at build time. It touches no other AWS resource -- no S3,
+# no lambda -- so this role is SSM plus the decrypt those SecureStrings require.
+data "aws_iam_policy_document" "github_actions_ios" {
+  statement {
+    sid     = "ReadBuildConfig"
+    effect  = "Allow"
+    actions = ["ssm:GetParameter", "ssm:GetParameters"]
+    resources = [
+      "arn:aws:ssm:${var.aws_region}:${data.aws_caller_identity.web_app_account.account_id}:parameter/${var.app_name}/spotify/*",
+      "arn:aws:ssm:${var.aws_region}:${data.aws_caller_identity.web_app_account.account_id}:parameter/${var.app_name}/api/*",
+    ]
+  }
+
+  statement {
+    sid       = "DecryptBuildConfig"
+    effect    = "Allow"
+    actions   = ["kms:Decrypt"]
+    resources = [aws_kms_alias.web_app.target_key_arn]
+  }
+}
+
+resource "aws_iam_role_policy" "github_actions_ios" {
+  name   = "deploy"
+  role   = aws_iam_role.github_actions["ios"].id
+  policy = data.aws_iam_policy_document.github_actions_ios.json
 }

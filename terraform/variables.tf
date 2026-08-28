@@ -204,3 +204,9 @@ variable "github_backend_repo" {
   type        = string
   default     = "Xomware/xomify-backend"
 }
+
+variable "github_ios_repo" {
+  description = "owner/repo whose GitHub Actions may assume the iOS build role"
+  type        = string
+  default     = "Xomware/xomify-ios"
+}
