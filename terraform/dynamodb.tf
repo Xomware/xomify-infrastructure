@@ -882,8 +882,13 @@ resource "aws_dynamodb_table" "notifications" {
   billing_mode   = "PAY_PER_REQUEST"
   read_capacity  = 0
   write_capacity = 0
-  hash_key       = "email"
-  range_key      = "tsId"
+
+  # Every other stateful table here carries this; these two were added later
+  # and missed it. A user's notification feed and its read state have no other
+  # source, and PITR restores a table rather than surviving one being deleted.
+  deletion_protection_enabled = true
+  hash_key                    = "email"
+  range_key                   = "tsId"
 
   server_side_encryption {
     enabled     = true
@@ -928,7 +933,12 @@ resource "aws_dynamodb_table" "notification_pending" {
   billing_mode   = "PAY_PER_REQUEST"
   read_capacity  = 0
   write_capacity = 0
-  hash_key       = "coalesceKey"
+
+  # The rows here are transient, which is an argument about the data and not
+  # about the table: losing it drops ten minutes of pending pushes and then
+  # breaks every coalesced notification until an apply puts it back.
+  deletion_protection_enabled = true
+  hash_key                    = "coalesceKey"
 
   server_side_encryption {
     enabled     = true
