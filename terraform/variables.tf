@@ -192,3 +192,15 @@ variable "apns_bundle_id" {
   default     = "com.Xomware.Xomify"
 }
 
+
+variable "github_frontend_repo" {
+  description = "owner/repo whose GitHub Actions may assume the frontend deploy role"
+  type        = string
+  default     = "Xomware/xomify-frontend"
+}
+
+variable "github_backend_repo" {
+  description = "owner/repo whose GitHub Actions may assume the backend deploy role"
+  type        = string
+  default     = "Xomware/xomify-backend"
+}
