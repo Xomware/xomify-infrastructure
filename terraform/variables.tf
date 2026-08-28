@@ -210,3 +210,21 @@ variable "github_ios_repo" {
   type        = string
   default     = "Xomware/xomify-ios"
 }
+
+variable "github_infrastructure_repo" {
+  description = "owner/repo of this infrastructure repository"
+  type        = string
+  default     = "Xomware/xomify-infrastructure"
+}
+
+variable "github_infrastructure_subjects" {
+  description = "OIDC subject prefixes for this infrastructure repository"
+  type        = list(string)
+  default     = ["repo:Xomware/xomify-infrastructure"]
+}
+
+variable "default_branch" {
+  description = "Branch a push to which is allowed to run terraform apply"
+  type        = string
+  default     = "master"
+}
