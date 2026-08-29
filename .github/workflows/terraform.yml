@@ -56,7 +56,11 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color -input=false -lock=false 2>&1 | tee /tmp/plan-output.txt
+        run: |
+          # A pipeline exits with tee's status, not terraform's, so without this a
+          # failed plan reports success and `Plan status` below never fires.
+          set -o pipefail
+          terraform plan -no-color -input=false -lock=false 2>&1 | tee /tmp/plan-output.txt
         continue-on-error: true
         env:
           TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
