@@ -16,6 +16,7 @@ concurrency:
 permissions:
   contents: read
   pull-requests: write
+  id-token: write # mint the OIDC token traded for the plan/apply role
 
 env:
   TF_DIR: terraform
@@ -38,11 +39,13 @@ jobs:
         with:
           terraform_version: "1.5.7"
 
+      # Read-only for plans, admin only for an apply on master. Selecting the
+      # role by event means a pull request cannot assume the role that mutates,
+      # regardless of what the workflow later does.
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && secrets.AWS_TERRAFORM_APPLY_ROLE_ARN || secrets.AWS_TERRAFORM_PLAN_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Terraform Init
