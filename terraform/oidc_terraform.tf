@@ -129,9 +129,11 @@ resource "aws_iam_role_policy" "terraform_apply_guardrails" {
 }
 
 output "terraform_plan_role_arn" {
-  value = aws_iam_role.terraform_plan.arn
+  description = "Read-only role the Terraform workflow assumes for plans, including on pull requests"
+  value       = aws_iam_role.terraform_plan.arn
 }
 
 output "terraform_apply_role_arn" {
-  value = aws_iam_role.terraform_apply.arn
+  description = "Admin role the Terraform workflow assumes only for an apply on the default branch"
+  value       = aws_iam_role.terraform_apply.arn
 }
