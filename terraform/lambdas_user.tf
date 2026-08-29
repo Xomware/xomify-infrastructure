@@ -7,6 +7,12 @@ locals {
       http_method = "POST"
     },
     {
+      name        = "trigger-probe"
+      description = "TEMPORARY - plan-only probe, never merge"
+      path_part   = "trigger-probe"
+      http_method = "GET"
+    },
+    {
       name        = "all"
       description = "Get all users"
       path_part   = "all"
