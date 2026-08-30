@@ -1,12 +1,6 @@
 locals {
   wrapped_lambdas = [
     {
-      name        = "update"
-      description = "Update user's wrapped enrollment / data"
-      path_part   = "update"
-      http_method = "POST"
-    },
-    {
       name        = "all"
       description = "Get user's wrapped data and history"
       path_part   = "all"
