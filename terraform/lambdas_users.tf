@@ -10,6 +10,12 @@ locals {
       path_part   = "likes-public"
       http_method = "POST"
     },
+    {
+      name        = "set-visibility"
+      description = "Set which artefacts friends can see (wrapped, release radar, top items)"
+      path_part   = "visibility"
+      http_method = "POST"
+    },
   ]
 }
 
