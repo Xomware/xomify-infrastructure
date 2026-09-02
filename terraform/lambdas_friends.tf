@@ -48,6 +48,24 @@ locals {
       path_part   = "remove"
       http_method = "DELETE"
     },
+    {
+      name        = "wrapped"
+      description = "A friend's Wrapped archive, gated on friendship + visibility"
+      path_part   = "wrapped"
+      http_method = "GET"
+    },
+    {
+      name        = "release-radar"
+      description = "A friend's Release Radar, gated on friendship + visibility"
+      path_part   = "release-radar"
+      http_method = "GET"
+    },
+    {
+      name        = "top-items"
+      description = "A friend's top items from cache, gated on friendship + visibility"
+      path_part   = "top-items"
+      http_method = "GET"
+    },
   ]
 }
 
