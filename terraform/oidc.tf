@@ -79,6 +79,15 @@ data "aws_iam_policy_document" "github_actions_frontend" {
     ]
   }
 
+  # The shared deploy finds the distribution by its alias. ListDistributions has no
+  # resource-level scoping, so it can't be narrower than "*".
+  statement {
+    sid       = "FindDistribution"
+    effect    = "Allow"
+    actions   = ["cloudfront:ListDistributions"]
+    resources = ["*"]
+  }
+
   statement {
     sid       = "InvalidateCache"
     effect    = "Allow"
