@@ -7,6 +7,22 @@ locals {
       http_method   = "POST"
       authorization = "NONE"
     },
+    # The Spotify client secret stays server-side: clients send the auth code or refresh
+    # token here and these call Spotify's token endpoint on their behalf.
+    {
+      name          = "spotify-token"
+      description   = "Exchange a Spotify auth code for tokens"
+      path_part     = "spotify-token"
+      http_method   = "POST"
+      authorization = "NONE"
+    },
+    {
+      name          = "spotify-refresh"
+      description   = "Refresh a Spotify access token"
+      path_part     = "spotify-refresh"
+      http_method   = "POST"
+      authorization = "NONE"
+    },
   ]
 }
 
